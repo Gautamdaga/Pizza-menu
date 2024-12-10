@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-
+import "./index.css";
 const pizzaData = [
   {
     name: "Focaccia",
@@ -46,35 +46,87 @@ const pizzaData = [
   },
 ];
 
-function App(props) {
+function App() {
   return (
-    <div>
-      <h1>Hello React!</h1>
-      {props.pizzaData.map((el) => (
-        <Pizza Pizza={el} />
-      ))}
-      {/* <Pizza Pizza={props.pizzaData[0]} /> */}
+    <div className="container">
+      <Header />
+      <Menu />
+      <Footer />
     </div>
   );
 }
 
 function Pizza(props) {
-  const data = props.Pizza.name.split(" ");
-  const name = data[1] ?? data[0];
+  //   const data = props?.Pizza?.name?.split(" ");
+  //   const name = data[1] ?? data[0] ?? "Spinaci";
   return (
-    <div>
-      <img src={`pizzas\\${name}.jpg`} alt="Pizza Spinaci" />
-      <h2>{props.Pizza.name}</h2>
-      <p>{props.Pizza.ingredients}</p>
-      <p>Price : ${props.Pizza.price}</p>
-    </div>
+    <li className="pizza">
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+      <div>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>Price : ${props.pizzaObj.price}</span>
+      </div>
+    </li>
   );
+}
+
+function Header() {
+  return (
+    <header className="header">
+      <h1>Fast React Pizza Co.</h1>;
+    </header>
+  );
+}
+function Menu() {
+  const pizzas = pizzaData;
+  //   const pizzas = [];
+  const pizzaLength = pizzas.length;
+  return (
+    <main className="menu">
+      <h2>Our Menu</h2>
+      {pizzaLength > 0 ? (
+        <ul className="pizzas">
+          {pizzaData.map((pizza) => (
+            <Pizza pizzaObj={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      ) : (
+        <p>We're still working on our menu. Please comeback later :)</p>
+      )}
+    </main>
+  );
+}
+function Footer() {
+  const hours = new Date().getHours();
+  const openHour = 10;
+  const closeHour = 20;
+  const isOpen = hours >= openHour && hours <= closeHour;
+  //   console.log(isOpen);
+  return (
+    <footer className="footer">
+      <div className="order">
+        {isOpen ? (
+          <p>
+            We're open to serve till {closeHour}:00. Come visit us or Order
+            online !
+          </p>
+        ) : (
+          <p>
+            We're happy to welcome you from {openHour}:00 to {closeHour}:00.
+          </p>
+        )}
+        <button className="btn">Order Now</button>
+      </div>
+    </footer>
+  );
+  //   return React.createElement("Footer", null, "We're currently open");
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App pizzaData={pizzaData} />
+    <App />
   </React.StrictMode>
 );
 
